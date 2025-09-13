@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>แบบประเมินสุขภาพจิต - Health App</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #ffffff;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top-nav {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background-color: #fff;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 12px 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      display: none;
+    }
+
+    .top-nav a {
+      color: #333;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    .top-nav a:hover,
+    .top-nav a.active {
+      background-color: #ff6666;
+      color: white;
+    }
+
+    .bottom-nav {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background-color: #fff;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+      padding: 10px 0;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      display: none;
+    }
+
+    .bottom-nav a {
+      color: #333;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    .bottom-nav a:hover,
+    .bottom-nav a.active {
+      background-color: #ff6666;
+      color: white;
+    }
+
+    .bottom-nav a span {
+      font-size: 10px;
+      margin-top: 4px;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      background-color: #fff;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(255, 102, 102, 0.2);
+      padding: 25px;
+      flex: 1;
+      overflow-y: auto;
+      margin-top: 60px;
+      margin-bottom: 60px;
+    }
+
+    .section {
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .section h2 {
+      color: #ff6666;
+      margin-bottom: 15px;
+      font-size: 1.4rem;
+    }
+
+    .checklist-item {
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .checklist-item input[type="checkbox"] {
+      margin-right: 10px;
+      width: 18px;
+      height: 18px;
+    }
+
+    .scale-container {
+      display: flex;
+      justify-content: space-between;
+      margin: 15px 0;
+      flex-wrap: wrap;
+    }
+
+    .scale-item {
+      width: 40px;
+      height: 40px;
+      border: 1px solid #ddd;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+
+    .scale-item.selected {
+      background-color: #ff6666;
+      color: white;
+      border-color: #ff6666;
+    }
+
+    .scale-item:hover:not(.selected) {
+      background-color: #f9f9f9;
+    }
+
+    .radio-group {
+      margin: 15px 0;
+    }
+
+    .radio-option {
+      display: block;
+      margin: 8px 0;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .radio-option input[type="radio"] {
+      margin-right: 10px;
+    }
+
+    .radio-option:hover {
+      background-color: #fafafa;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 10px;
+      font-size: 17px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background-color 0.3s;
+    }
+
+    .btn-back {
+      background-color: #ccc;
+      color: #333;
+    }
+
+    .btn-back:hover {
+      background-color: #bbb;
+    }
+
+    .btn-next {
+      background-color: #ff6666;
+      color: white;
+    }
+
+    .btn-next:hover {
+      background-color: #ff9999;
+    }
+
+    .summary {
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      display: none;
+    }
+
+    .summary h3 {
+      color: #ff6666;
+      margin-bottom: 15px;
+    }
+
+    .summary p {
+      margin: 8px 0;
+      line-height: 1.5;
+    }
+
+    .btn-save {
+      background-color: #4CAF50;
+      color: white;
+      margin-top: 15px;
+    }
+
+    .btn-save:hover {
+      background-color: #45a049;
+    }
+
+    .error-message {
+      color: #e74c3c;
+      font-size: 14px;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .success-message {
+      color: #27ae60;
+      font-size: 14px;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    @media (min-width: 768px) {
+      .top-nav {
+        display: flex;
+      }
+      .bottom-nav {
+        display: none;
+      }
+      .container {
+        margin-top: 60px;
+        margin-bottom: 20px;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .top-nav {
+        display: none;
+      }
+      .bottom-nav {
+        display: flex;
+      }
+      .container {
+        margin-top: 20px;
+        margin-bottom: 60px;
+      }
+      .scale-item {
+        width: 35px;
+        height: 35px;
+        font-size: 12px;
+      }
+      .radio-option {
+        padding: 8px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 20px 15px;
+      }
+      h2 {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="top-nav">
+    <a href="home.html" class="nav-link">หน้าแรก</a>
+    <a href="assessment.html" class="nav-link active">แบบทดสอบ</a>
+    <a href="history.html" class="nav-link">ผลย้อนหลัง</a>
+    <a href="profile.html" class="nav-link">ข้อมูลส่วนตัว</a>
+  </nav>
+
+  <nav class="bottom-nav">
+    <a href="home.html" class="nav-link">
+      <span>🏠</span>
+      <span>หน้าแรก</span>
+    </a>
+    <a href="assessment.html" class="nav-link active">
+      <span>📝</span>
+      <span>แบบทดสอบ</span>
+    </a>
+    <a href="history.html" class="nav-link">
+      <span>📊</span>
+      <span>ผลย้อนหลัง</span>
+    </a>
+    <a href="profile.html" class="nav-link">
+      <span>👤</span>
+      <span>ข้อมูลส่วนตัว</span>
+    </a>
+  </nav>
+
+  <div class="container">
+
+    <div id="section1" class="section">
+      <h2>📌 ข้อมูลปัจจัยเสี่ยง</h2>
+      <p>เลือกได้มากกว่า 1 ข้อ</p>
+      <div class="checklist-item"><input type="checkbox" id="risk1"> <label for="risk1">ผู้ป่วยโรคติดเชื้อ COVID-19</label></div>
+      <div class="checklist-item"><input type="checkbox" id="risk2"> <label for="risk2">ผู้ถูกกักตัวที่บ้าน (Home Quarantine)</label></div>
+      <div class="checklist-item"><input type="checkbox" id="risk3"> <label for="risk3">สมาชิกในครอบครัวมีผู้ป่วยโรคติดเชื้อ COVID-19/ผู้กักตัว</label></div>
+      <div class="checklist-item"><input type="checkbox" id="risk4"> <label for="risk4">ว่างงาน/ถูกเลิกจ้าง/ตกงาน</label></div>
+      <div class="checklist-item"><input type="checkbox" id="risk5"> <label for="risk5">ธุรกิจประสบปัญหาตลาดคล่อง/ผันผวน</label></div>
+      <div class="checklist-item"><input type="checkbox" id="risk6"> <label for="risk6">รายได้ไม่พออยู่ชดใช้หนี้สิน</label></div>
+      <div class="checklist-item"><input type="checkbox" id="risk7"> <label for="risk7">ผู้ป่วยเรื้อรังต้องรับยาต่อเนื่อง (โรคประจำตัว)</label></div>
+      <div class="checklist-item"><input type="checkbox" id="risk8"> <label for="risk8">เป็นผู้พิการทางกาย</label></div>
+      <div class="checklist-item"><input type="checkbox" id="risk9"> <label for="risk9">เคยป่วยจิตเวชหรือมีกินยาทางจิต</label></div>
+      <div class="checklist-item"><input type="checkbox" id="risk10"> <label for="risk10">ครอบครัวมีผู้สูงอายุ/เด็กแรกเกิด</label></div>
+      <div class="checklist-item"><input type="checkbox" id="risk11"> <label for="risk11">ครอบครัวมีผู้พิการทางกาย/ทางจิต</label></div>
+      <div class="checklist-item"><input type="checkbox" id="risk12"> <label for="risk12">ตอนนี้ครอบครัวมีผู้ป่วยติดเตียง</label></div>
+      <div class="checklist-item"><input type="checkbox" id="risk13"> <label for="risk13">ไม่อยู่ในกลุ่มที่ระบุข้างต้น</label></div>
+      <button class="btn btn-next" id="nextBtn1">ถัดไป</button>
+    </div>
+
+    <div id="section2" class="section" style="display:none;">
+      <h2>❤️ เริ่มตรวจสอบเรื่องสุขภาพใจ</h2>
+      <p><strong>แบบประเมินพลังใจ (RQ)</strong><br>ในช่อง 2 สัปดาห์ที่ผ่านมา ท่านมีความเชื่อมั่นในประเด็นต่างๆ ต่อไปนี้เพียงใด? "1 หมายถึง น้อย และ 10 หมายถึง มาก"</p>
+
+      <div class="question">
+        <p>1.) ความยากลำบากทำให้ฉันแกร่งขึ้น</p>
+        <div class="scale-container" id="rq1"></div>
+      </div>
+
+      <div class="question">
+        <p>2.) ฉันมีกำลังใจและได้รับการสนับสนุนจากคนรอบข้าง</p>
+        <div class="scale-container" id="rq2"></div>
+      </div>
+
+      <div class="question">
+        <p>3.) การแก้ไขปัญหาทำให้ฉันมีประสบการณ์มากขึ้น</p>
+        <div class="scale-container" id="rq3"></div>
+      </div>
+
+       <button class="btn btn-next" id="nextBtn2">ถัดไป</button>
+      <button class="btn btn-back" id="backBtn2">ย้อนกลับ</button>
+     
+    </div>
+
+    <div id="section3" class="section" style="display:none;">
+      <h2>🧠 แบบประเมินภาวะเหนื่อยล้าหมดไฟ (Burnout)</h2>
+      <p>ท่านเคยมีความรู้สึกเช่นนี้กับการทำงานของท่านหรือไม่ ?...โดยเลือกคำตอบที่ตรงกับความรู้สึกของท่านมากที่สุด</p>
+
+      <div class="question">
+        <p>1.) ท่านรู้สึกขาดแรงใจ/ความกระตือรือร้น</p>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="burnout1" value="rarely"> แทบไม่มี</label>
+          <label class="radio-option"><input type="radio" name="burnout1" value="sometimes"> เป็นบางครั้ง</label>
+          <label class="radio-option"><input type="radio" name="burnout1" value="often"> บ่อยครั้ง</label>
+          <label class="radio-option"><input type="radio" name="burnout1" value="always"> เป็นประจำ</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <p>2.) ท่านรู้สึกไม่อยากสนใจคนรอบข้าง</p>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="burnout2" value="rarely"> แทบไม่มี</label>
+          <label class="radio-option"><input type="radio" name="burnout2" value="sometimes"> เป็นบางครั้ง</label>
+          <label class="radio-option"><input type="radio" name="burnout2" value="often"> บ่อยครั้ง</label>
+          <label class="radio-option"><input type="radio" name="burnout2" value="always"> เป็นประจำ</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <p>3.) ท่านรู้สึกไม่ประสบความสำเร็จเท่าที่ควร</p>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="burnout3" value="rarely"> แทบไม่มี</label>
+          <label class="radio-option"><input type="radio" name="burnout3" value="sometimes"> เป็นบางครั้ง</label>
+          <label class="radio-option"><input type="radio" name="burnout3" value="often"> บ่อยครั้ง</label>
+          <label class="radio-option"><input type="radio" name="burnout3" value="always"> เป็นประจำ</label>
+        </div>
+      </div>
+
+      <button class="btn btn-next" id="nextBtn3">ถัดไป</button>
+      <button class="btn btn-back" id="backBtn3">ย้อนกลับ</button>
+      
+    </div>
+
+    <div id="section4" class="section" style="display:none;">
+      <h2>😰 แบบประเมินความเครียด (ST-5)</h2>
+      <p>ใน 2 สัปดาห์ที่ผ่านมา ท่านรู้สึกอย่างไร ? ...โดยเลือกคำตอบที่ตรงกับความรู้สึกของท่านมากที่สุด</p>
+
+      <div class="question">
+        <p>1.) ใน 2 สัปดาห์ที่ผ่านมา รวมวันนี้ "มีปัญหาการนอน นอนไม่หลับหรือนอนมาก"</p>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="st1" value="rarely"> แทบไม่มี</label>
+          <label class="radio-option"><input type="radio" name="st1" value="sometimes"> เป็นบางครั้ง</label>
+          <label class="radio-option"><input type="radio" name="st1" value="often"> บ่อยครั้ง</label>
+          <label class="radio-option"><input type="radio" name="st1" value="always"> เป็นประจำ</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <p>2.) ใน 2 สัปดาห์ที่ผ่านมา รวมวันนี้ "มีสมาธิไม่ดี"</p>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="st2" value="rarely"> แทบไม่มี</label>
+          <label class="radio-option"><input type="radio" name="st2" value="sometimes"> เป็นบางครั้ง</label>
+          <label class="radio-option"><input type="radio" name="st2" value="often"> บ่อยครั้ง</label>
+          <label class="radio-option"><input type="radio" name="st2" value="always"> เป็นประจำ</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <p>3.) ใน 2 สัปดาห์ที่ผ่านมา รวมวันนี้ "หงุดหงิด/กระวนกระวาย/ว้าวุ่นใจ"</p>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="st3" value="rarely"> แทบไม่มี</label>
+          <label class="radio-option"><input type="radio" name="st3" value="sometimes"> เป็นบางครั้ง</label>
+          <label class="radio-option"><input type="radio" name="st3" value="often"> บ่อยครั้ง</label>
+          <label class="radio-option"><input type="radio" name="st3" value="always"> เป็นประจำ</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <p>4.) ใน 2 สัปดาห์ที่ผ่านมา รวมวันนี้ "รู้สึกเบื่อ เบื่อ"</p>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="st4" value="rarely"> แทบไม่มี</label>
+          <label class="radio-option"><input type="radio" name="st4" value="sometimes"> เป็นบางครั้ง</label>
+          <label class="radio-option"><input type="radio" name="st4" value="often"> บ่อยครั้ง</label>
+          <label class="radio-option"><input type="radio" name="st4" value="always"> เป็นประจำ</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <p>5.) ใน 2 สัปดาห์ที่ผ่านมา รวมวันนี้ "ไม่อยากพบปะผู้คน"</p>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="st5" value="rarely"> แทบไม่มี</label>
+          <label class="radio-option"><input type="radio" name="st5" value="sometimes"> เป็นบางครั้ง</label>
+          <label class="radio-option"><input type="radio" name="st5" value="often"> บ่อยครั้ง</label>
+          <label class="radio-option"><input type="radio" name="st5" value="always"> เป็นประจำ</label>
+        </div>
+      </div>
+
+       <button class="btn btn-next" id="nextBtn4">ถัดไป</button>
+      <button class="btn btn-back" id="backBtn4">ย้อนกลับ</button>
+     
+    </div>
+
+    <div id="section5" class="section" style="display:none;">
+      <h2>😔 แบบคัดกรองภาวะซึมเศร้า 2 คำถาม (2Q PLUS)</h2>
+      <p>1.) ใน 2 สัปดาห์ที่ผ่านมา รวมวันนี้ ท่านรู้สึกหดหู่, เศร้า หรือท้อแท้สิ้นหวัง หรือไม่ ?</p>
+      <div class="radio-group">
+        <label class="radio-option"><input type="radio" name="depression1" value="no"> ไม่ใช่</label>
+        <label class="radio-option"><input type="radio" name="depression1" value="yes"> ใช่</label>
+      </div>
+
+      <p>2.) ใน 2 สัปดาห์ที่ผ่านมา รวมวันนี้ ท่านรู้สึกเบื่อ ทำอะไรก็ไม่เพลิดเพลิน หรือไม่ ?</p>
+      <div class="radio-group">
+        <label class="radio-option"><input type="radio" name="depression2" value="no"> ไม่ใช่</label>
+        <label class="radio-option"><input type="radio" name="depression2" value="yes"> ใช่</label>
+      </div>
+
+      <h3>❓ คำถามคัดกรองการฆ่าตัวตาย</h3>
+      <p>1.) ใน 1 เดือนที่ผ่านมา รวมวันนี้ ท่านรู้สึกอยากทำร้ายตัวเอง หรืออยากตายอยู่ ?</p>
+      <div class="radio-group">
+        <label class="radio-option"><input type="radio" name="suicide" value="no"> ไม่ใช่</label>
+        <label class="radio-option"><input type="radio" name="suicide" value="yes"> ใช่</label>
+      </div>
+
+      <button class="btn btn-next" id="nextBtn5">สรุปผล</button>
+      <button class="btn btn-back" id="backBtn5">ย้อนกลับ</button>
+      
+    </div>
+
+    <div id="section6" class="section summary" style="display:none;">
+      <h3>📊 สรุปผลการประเมิน</h3>
+      <p id="summaryText">Loading results...</p>
+      <p class="success-message" id="saveMessage"></p>
+      <button class="btn btn-save" id="saveResultBtn">บันทึกผลการประเมิน</button>
+      <button class="btn btn-back" id="backBtn6">ย้อนกลับ</button>
+    </div>
+
+    <p class="error-message" id="errorMessage"></p>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBSI8lCUCwhf1rUj-2KyOk9qEpq4ENrkDU",
+      authDomain: "health-7df2d.firebaseapp.com",
+      projectId: "health-7df2d",
+      storageBucket: "health-7df2d.firebasestorage.app",
+      messagingSenderId: "397476928045",
+      appId: "1:397476928045:web:b93febdcfcd814cc1af6a4",
+      measurementId: "G-C3TH3ER0CE"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+    const db = getFirestore(app);
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+      }
+
+      const currentPath = window.location.pathname.split('/').pop();
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === currentPath) {
+          link.classList.add('active');
+        }
+      });
+    });
+
+    function createScale(containerId, count = 10) {
+      const container = document.getElementById(containerId);
+      for (let i = 1; i <= count; i++) {
+        const item = document.createElement('div');
+        item.className = 'scale-item';
+        item.textContent = i;
+        item.addEventListener('click', () => {
+          document.querySelectorAll(`#${containerId} .scale-item`).forEach(el => el.classList.remove('selected'));
+          item.classList.add('selected');
+        });
+        container.appendChild(item);
+      }
+    }
+
+    createScale('rq1');
+    createScale('rq2');
+    createScale('rq3');
+
+    let answers = {};
+
+    function showSection(sectionId) {
+      document.querySelectorAll('.section').forEach(el => el.style.display = 'none');
+      document.getElementById(sectionId).style.display = 'block';
+      document.getElementById('errorMessage').textContent = '';
+    }
+
+    document.getElementById('nextBtn1').addEventListener('click', () => {
+      const selected = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(el => el.id);
+      if (selected.length === 0) {
+        document.getElementById('errorMessage').textContent = 'กรุณาเลือกอย่างน้อย 1 ข้อ';
+        return;
+      }
+      answers.risks = selected;
+      showSection('section2');
+    });
+
+    document.getElementById('backBtn2').addEventListener('click', () => showSection('section1'));
+    document.getElementById('nextBtn2').addEventListener('click', () => {
+      const scores = [
+        document.querySelector('#rq1 .selected')?.textContent,
+        document.querySelector('#rq2 .selected')?.textContent,
+        document.querySelector('#rq3 .selected')?.textContent
+      ];
+      if (!scores.every(s => s)) {
+        document.getElementById('errorMessage').textContent = 'กรุณาเลือกคะแนนทุกข้อ';
+        return;
+      }
+      answers.rq = scores.map(Number);
+      showSection('section3');
+    });
+
+    document.getElementById('backBtn3').addEventListener('click', () => showSection('section2'));
+    document.getElementById('nextBtn3').addEventListener('click', () => {
+      const burnout = ['burnout1', 'burnout2', 'burnout3'].map(q => {
+        const sel = document.querySelector(`input[name="${q}"]:checked`);
+        return sel ? sel.value : null;
+      });
+      if (burnout.includes(null)) {
+        document.getElementById('errorMessage').textContent = 'กรุณาเลือกคำตอบทุกข้อ';
+        return;
+      }
+      answers.burnout = burnout;
+      showSection('section4');
+    });
+
+    document.getElementById('backBtn4').addEventListener('click', () => showSection('section3'));
+    document.getElementById('nextBtn4').addEventListener('click', () => {
+      const st = ['st1', 'st2', 'st3', 'st4', 'st5'].map(q => {
+        const sel = document.querySelector(`input[name="${q}"]:checked`);
+        return sel ? sel.value : null;
+      });
+      if (st.includes(null)) {
+        document.getElementById('errorMessage').textContent = 'กรุณาเลือกคำตอบทุกข้อ';
+        return;
+      }
+      answers.st5 = st;
+      showSection('section5');
+    });
+
+    document.getElementById('backBtn5').addEventListener('click', () => showSection('section4'));
+    document.getElementById('nextBtn5').addEventListener('click', () => {
+      const depression = [
+        document.querySelector('input[name="depression1"]:checked')?.value,
+        document.querySelector('input[name="depression2"]:checked')?.value
+      ];
+      const suicide = document.querySelector('input[name="suicide"]:checked')?.value;
+
+      if (!depression.every(v => v) || !suicide) {
+        document.getElementById('errorMessage').textContent = 'กรุณาเลือกคำตอบทุกข้อ';
+        return;
+      }
+      answers.depression = depression;
+      answers.suicide = suicide;
+      generateSummary();
+      showSection('section6');
+    });
+
+    function generateSummary() {
+      const rqAvg = Math.round((answers.rq[0] + answers.rq[1] + answers.rq[2]) / 3);
+      let rqRisk = "เสี่ยงน้อย";
+      if (rqAvg <= 4) rqRisk = "เสี่ยงสูง";
+      else if (rqAvg <= 7) rqRisk = "เสี่ยงปานกลาง";
+
+      let burnoutRisk = "เสี่ยงน้อย";
+      const burnoutCount = answers.burnout.filter(b => b === "often" || b === "always").length;
+      if (burnoutCount >= 2) burnoutRisk = "เสี่ยงสูง";
+      else if (burnoutCount === 1) burnoutRisk = "เสี่ยงปานกลาง";
+
+      let stRisk = "เสี่ยงน้อย";
+      const stCount = answers.st5.filter(s => s === "often" || s === "always").length;
+      if (stCount >= 4) stRisk = "เสี่ยงสูง";
+      else if (stCount >= 2) stRisk = "เสี่ยงปานกลาง";
+
+      let depressionRisk = "ไม่มีภาวะเสี่ยง";
+      if (answers.depression[0] === "yes" && answers.depression[1] === "yes") depressionRisk = "เสี่ยงซึมเศร้า";
+
+      let happiness = "มีความสุขมาก";
+      if (rqAvg <= 4) happiness = "มีความสุขน้อย";
+      else if (rqAvg <= 7) happiness = "มีความสุขปานกลาง";
+
+      let suicideWarning = "";
+      if (answers.suicide === "yes") {
+        suicideWarning = "<span style='color:#e74c3c; font-weight:bold;'>⚠️ คุณมีความคิดอยากทำร้ายตัวเอง กรุณาติดต่อสายด่วนสุขภาพจิต 1323 ทันที</span>";
+      }
+
+      document.getElementById('summaryText').innerHTML = `
+        <p>ท่านมีสุขภาพจิตโดยรวมที่ดี</p>
+        <p><strong>พลังใจ (RQ):</strong> ${rqRisk}</p>
+        <p><strong>ภาวะหมดไฟ (Burnout):</strong> ${burnoutRisk}</p>
+        <p><strong>ความเครียด (ST-5):</strong> ${stRisk}</p>
+        <p><strong>ภาวะซึมเศร้า (2Q+):</strong> ${depressionRisk}</p>
+        <p><strong>ความสุข (Happiness scale):</strong> ${happiness}</p>
+        ${suicideWarning}
+        <p>ⓘ กด "บันทึกผลการประเมิน" เพื่อบันทึกข้อมูลและดูย้อนหลังในหน้า History</p>
+      `;
+    }
+
+    document.getElementById('saveResultBtn').addEventListener('click', async () => {
+  const user = auth.currentUser;
+  if (!user) {
+    document.getElementById('errorMessage').textContent = 'ไม่พบผู้ใช้งาน';
+    return;
+  }
+
+  try {
+    await addDoc(collection(db, "assessments"), {
+      uid: user.uid,
+      email: user.email,
+      risks: answers.risks,
+      rq: answers.rq,
+      burnout: answers.burnout,
+      st5: answers.st5,
+      depression: answers.depression,
+      suicide: answers.suicide,
+      timestamp: serverTimestamp(),
+      summary: {
+        rqRisk: document.getElementById('summaryText').innerText.match(/พลังใจ \(RQ\): (.+)/)?.[1],
+        burnoutRisk: document.getElementById('summaryText').innerText.match(/ภาวะหมดไฟ \(Burnout\): (.+)/)?.[1],
+        stRisk: document.getElementById('summaryText').innerText.match(/ความเครียด \(ST-5\): (.+)/)?.[1],
+        depressionRisk: document.getElementById('summaryText').innerText.match(/ภาวะซึมเศร้า \(2Q\+\): (.+)/)?.[1],
+        happiness: document.getElementById('summaryText').innerText.match(/ความสุข \(Happiness scale\): (.+)/)?.[1]
+      }
+    });
+
+    // แสดงข้อความสำเร็จและ redirect ไปหน้า history
+    document.getElementById('saveMessage').textContent = 'บันทึกผลสำเร็จ! กำลังนำทางไปยังประวัติ...';
+    document.getElementById('saveMessage').style.color = '#27ae60';
+    
+    // Redirect ไปหน้า history.html หลังจาก 2 วินาที
+    setTimeout(() => {
+      window.location.href = "history.html";
+    }, 2000);
+    
+  } catch (error) {
+    document.getElementById('errorMessage').textContent = 'บันทึกข้อมูลล้มเหลว: ' + error.message;
+  }
+});
+    document.getElementById('backBtn6').addEventListener('click', () => showSection('section5'));
+
+    showSection('section1');
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ความรู้เรื่องสุขภาพจิต - Health App</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #ffffff;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* แถบเมนูด้านบน (Desktop) */
+    .top-nav {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background-color: #fff;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 12px 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      display: none;
+    }
+
+    .top-nav a {
+      color: #333;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    .top-nav a:hover,
+    .top-nav a.active {
+      background-color: #ff6666;
+      color: white;
+    }
+
+    /* แถบเมนูด้านล่าง (Mobile) */
+    .bottom-nav {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background-color: #fff;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+      padding: 10px 0;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      display: none;
+    }
+
+    .bottom-nav a {
+      color: #333;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    .bottom-nav a:hover,
+    .bottom-nav a.active {
+      background-color: #ff6666;
+      color: white;
+    }
+
+    .bottom-nav a span {
+      font-size: 10px;
+      margin-top: 4px;
+    }
+
+    /* พื้นที่เนื้อหาหลัก */
+    .main-content {
+      margin-top: 60px;
+      margin-bottom: 60px;
+      padding: 20px;
+      flex: 1;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
+      line-height: 1.7;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .logo {
+      color: #ff6666;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      color: #333;
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #ff6666;
+      margin: 25px 0 15px;
+      font-size: 1.5rem;
+      border-left: 5px solid #ff6666;
+      padding-left: 15px;
+    }
+
+    p {
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
+
+    .highlight {
+      background-color: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      max-width: 250px;
+      padding: 16px;
+      background-color: #ff6666;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 17px;
+      font-weight: 600;
+      cursor: pointer;
+      margin: 30px auto 0;
+      transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #ff9999;
+    }
+
+    /* ตอบสนอง */
+    @media (min-width: 768px) {
+      .top-nav {
+        display: flex;
+      }
+      .bottom-nav {
+        display: none;
+      }
+      .main-content {
+        margin-top: 60px;
+        margin-bottom: 20px;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .top-nav {
+        display: none;
+      }
+      .bottom-nav {
+        display: flex;
+      }
+      .main-content {
+        margin-top: 20px;
+        margin-bottom: 60px;
+      }
+      h1 {
+        font-size: 1.6rem;
+      }
+      h2 {
+        font-size: 1.4rem;
+        padding-left: 12px;
+      }
+      p {
+        font-size: 15px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .logo {
+        font-size: 2rem;
+      }
+      .highlight {
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Nav -->
+  <nav class="top-nav">
+    <a href="home.html" class="nav-link">หน้าแรก</a>
+    <a href="assessment.html" class="nav-link">แบบทดสอบ</a>
+    <a href="history.html" class="nav-link">ผลย้อนหลัง</a>
+    <a href="profile.html" class="nav-link">ข้อมูลส่วนตัว</a>
+  </nav>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <a href="home.html" class="nav-link">
+      <span>🏠</span>
+      <span>หน้าแรก</span>
+    </a>
+    <a href="assessment.html" class="nav-link">
+      <span>📝</span>
+      <span>แบบทดสอบ</span>
+    </a>
+    <a href="history.html" class="nav-link">
+      <span>📊</span>
+      <span>ผลย้อนหลัง</span>
+    </a>
+     <!-- ข้อมูลส่วนตัว -->
+    <a href="profile.html" class="menu-card">
+      <div class="menu-icon">👤</div>
+      <div class="menu-label">ข้อมูลส่วนตัว</div>
+    </a>
+  </nav>
+
+  <div class="main-content">
+
+    <div class="header">
+      <div class="logo">❤️</div>
+      <h1>ความรู้เรื่องสุขภาพจิต</h1>
+    </div>
+
+    <p>สุขภาพจิตคือ “ความสามารถในการรับมือกับความเครียดในชีวิตประจำวัน การทำงานอย่างมีประสิทธิภาพ การสร้างความสัมพันธ์ที่ดีกับผู้อื่น และการปรับตัวเมื่อเผชิญกับการเปลี่ยนแปลง” — ไม่ใช่แค่ “ไม่เป็นโรคทางจิต” แต่คือ “ความสมดุลของจิตใจ”</p>
+
+    <h2>⚠️ ปัจจัยเสี่ยงต่อสุขภาพจิต</h2>
+    <p>บางสถานการณ์อาจทำให้สุขภาพจิตของคุณตกต่ำได้ เช่น:</p>
+    <ul style="margin: 15px 0; padding-left: 20px;">
+      <li>การสูญเสียคนใกล้ชิด</li>
+      <li>ปัญหาครอบครัวหรือความสัมพันธ์</li>
+      <li>งานหนัก ขาดเวลาพักผ่อน</li>
+      <li>ภาวะเศรษฐกิจยากจน หนี้สิน</li>
+      <li>การถูกเหยียดหยามหรือละเมิด</li>
+      <li>การใช้สารเสพติด</li>
+      <li>โรคเรื้อรังหรืออาการเจ็บป่วยระยะยาว</li>
+    </ul>
+
+    <h2>🚩 สัญญาณเตือนภัยทางสุขภาพจิต</h2>
+    <p>หากคุณหรือคนรอบข้างมีพฤติกรรมเหล่านี้เกิน 2 สัปดาห์ ควรระวัง:</p>
+    <div class="highlight">
+      <strong>• รู้สึกเศร้า หมดหวัง หรือหดหู่แทบทุกวัน</strong><br>
+      • ไม่อยากทำอะไรเลย แม้แต่กิจกรรมที่เคยชอบ<br>
+      • นอนไม่หลับ หรือนอนมากเกินไป<br>
+      • กินน้อยลงหรือกินมากผิดปกติ<br>
+      • สมาธิสั้น จำไม่ได้ ตัดสินใจไม่ได้<br>
+      • รู้สึกเหนื่อยล้าตลอดเวลา<br>
+      • คิดว่าตัวเองไร้ค่า หรือเป็นภาระของคนอื่น<br>
+      • คิดอยากตาย หรือทำร้ายตัวเอง
+    </div>
+
+    <h2>💡 วิธีดูแลสุขภาพจิตของตัวเอง</h2>
+    <p>คุณสามารถเริ่มดูแลตัวเองได้ตั้งแต่วันนี้:</p>
+    <ol style="margin: 15px 0; padding-left: 20px;">
+      <li><strong>ระบายอารมณ์</strong> — พูดคุยกับเพื่อน คนในครอบครัว หรือเขียนไดอารี่</li>
+      <li><strong>ออกกำลังกาย</strong> — เดิน วิ่ง โยคะ หรือเต้น แค่วันละ 20 นาที</li>
+      <li><strong>นอนให้พอ</strong> — หลับให้ได้อย่างน้อย 7–8 ชั่วโมง/คืน</li>
+      <li><strong>กินอาหารที่ดี</strong> — ลดน้ำตาล คาเฟอีน และอาหารแปรรูป</li>
+      <li><strong>หายใจลึกๆ</strong> — ลองหายใจเข้า 4 วินาที กลั้น 4 วินาที หายใจออก 6 วินาที</li>
+      <li><strong>หลีกเลี่ยงโซเชียลมีเดีย</strong> — จำกัดเวลาใช้ อย่าเปรียบเทียบชีวิตกับคนอื่น</li>
+      <li><strong>ฝึกขอบคุณ</strong> — ทุกเย็น คิด 3 สิ่งที่รู้สึกขอบคุณในวันนี้</li>
+    </ol>
+
+    <h2>🆘 แหล่งช่วยเหลือฉุกเฉิน</h2>
+    <p>หากคุณรู้สึกอยากทำร้ายตัวเองหรือมีความคิดฆ่าตัวตาย — คุณไม่ได้อยู่คนเดียว</p>
+    <div class="highlight">
+      <strong>สายด่วนสุขภาพจิต 1323</strong><br>
+      บริการฟรี 24 ชั่วโมง โดยกรมสุขภาพจิต กระทรวงสาธารณสุข<br>
+      📞 โทร 1323 — คุยกับนักจิตวิทยาโดยไม่ต้องเปิดเผยตัวตน<br>
+      💬 แชทออนไลน์: <a href="https://www.dmh.go.th" target="_blank">dmh.go.th</a><br>
+      🌐 แอป "Sukhaphap" — ดาวน์โหลดได้บน Android/iOS
+    </div>
+
+    <p>การขอความช่วยเหลือไม่ใช่เรื่องอ่อนแอ — มันคือ “ความกล้าหาญ” ที่ยิ่งใหญ่ที่สุด</p>
+
+   
+
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBSI8lCUCwhf1rUj-2KyOk9qEpq4ENrkDU",
+      authDomain: "health-7df2d.firebaseapp.com",
+      projectId: "health-7df2d",
+      storageBucket: "health-7df2d.appspot.com", // ✅ แก้ไขแล้ว!
+      messagingSenderId: "397476928045",
+      appId: "1:397476928045:web:b93febdcfcd814cc1af6a4",
+      measurementId: "G-C3TH3ER0CE"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      // ตั้งค่าเมนู Active
+      const currentPath = window.location.pathname.split('/').pop();
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === currentPath) {
+          link.classList.add('active');
+        }
+      });
+    });
+
+    document.getElementById('backBtn').addEventListener('click', () => {
+      window.location.href = "home.html";
+    });
+  </script>
+
+</body>
+</html>
