@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>สมัครสมาชิก - Health AI Plus+</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #ffffff;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .signup-container {
+      background-color: #fff;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(255, 102, 102, 0.2);
+      padding: 40px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+   .logo {
+      margin-bottom: 25px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .logo img {
+      width: 150px;
+      height: 150px;
+      border-radius: 10%;
+      object-fit: cover;
+      border: 3px solid #ff6666;
+      padding: 5px;
+      box-shadow: 0 4px 10px rgba(255, 102, 102, 0.3);
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 30px;
+      font-size: 1.8rem;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #555;
+      font-weight: 600;
+    }
+
+    .input-group input,
+    .input-group select {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+
+    .input-group input:focus,
+    .input-group select:focus {
+      outline: none;
+      border-color: #ff6666;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      background-color: #ff6666;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 17px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #ff9999;
+    }
+
+    .link {
+      display: block;
+      margin-top: 20px;
+      color: #ff6666;
+      text-decoration: none;
+      font-size: 15px;
+    }
+
+    .link:hover {
+      text-decoration: underline;
+    }
+
+    .error-message {
+      color: #e74c3c;
+      font-size: 14px;
+      margin-top: 10px;
+      min-height: 20px;
+    }
+
+    .success-message {
+      color: #27ae60;
+      font-size: 14px;
+      margin-top: 10px;
+      min-height: 20px;
+    }
+
+    @media (max-width: 480px) {
+      .signup-container {
+        padding: 30px 20px;
+      }
+      .logo {
+        font-size: 2rem;
+      }
+      h1 {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="signup-container">
+    <div class="logo"><img src="./logo.png" alt="Health App Logo"></div>
+    <h1>สมัครสมาชิก</h1>
+
+    <form id="signupForm">
+      <div class="input-group">
+        <label for="fullName">ชื่อ-นามสกุล *</label>
+        <input type="text" id="fullName" placeholder="" required />
+      </div>
+
+      <div class="input-group">
+        <label for="age">อายุ *</label>
+        <input type="number" id="age" placeholder="" min="1" max="120" required />
+      </div>
+
+      <div class="input-group">
+        <label for="gender">เพศ *</label>
+        <select id="gender" required>
+          <option value="">เลือกเพศ</option>
+          <option value="male">ชาย</option>
+          <option value="female">หญิง</option>
+          <option value="other">อื่นๆ</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label for="address">ที่อยู่ *</label>
+        <input type="text" id="address" placeholder="" required />
+      </div>
+
+      <div class="input-group">
+        <label for="province">จังหวัด *</label>
+        <input type="text" id="province" placeholder="" required />
+      </div>
+
+      <div class="input-group">
+        <label for="district">อำเภอ *</label>
+        <input type="text" id="district" placeholder="" required />
+      </div>
+
+      <div class="input-group">
+        <label for="subdistrict">ตำบล *</label>
+        <input type="text" id="subdistrict" placeholder="" required />
+      </div>
+
+      <div class="input-group">
+        <label for="email">อีเมล *</label>
+        <input type="email" id="email" placeholder="กรุณาใส่อีเมล" required />
+      </div>
+
+      <div class="input-group">
+        <label for="password">รหัสผ่าน *</label>
+        <input type="password" id="password" placeholder="อย่างน้อย 6 ตัวอักษร" required />
+      </div>
+
+      <div class="input-group">
+        <label for="confirmPassword">ยืนยันรหัสผ่าน *</label>
+        <input type="password" id="confirmPassword" placeholder="กรุณาพิมพ์ซ้ำ" required />
+      </div>
+
+      <button type="submit" class="btn">สมัครสมาชิก</button>
+    </form>
+
+    <p class="error-message" id="errorMessage"></p>
+    <p class="success-message" id="successMessage"></p>
+
+    <a href="login.html" class="link">มีบัญชีแล้ว? กลับไปเข้าสู่ระบบ</a>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBSI8lCUCwhf1rUj-2KyOk9qEpq4ENrkDU",
+      authDomain: "health-7df2d.firebaseapp.com",
+      projectId: "health-7df2d",
+      storageBucket: "health-7df2d.firebasestorage.app",
+      messagingSenderId: "397476928045",
+      appId: "1:397476928045:web:b93febdcfcd814cc1af6a4",
+      measurementId: "G-C3TH3ER0CE"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+    const db = getFirestore(app);
+
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fullName = document.getElementById('fullName').value.trim();
+      const age = parseInt(document.getElementById('age').value);
+      const gender = document.getElementById('gender').value;
+      const address = document.getElementById('address').value.trim();
+      const province = document.getElementById('province').value.trim();
+      const district = document.getElementById('district').value.trim();
+      const subdistrict = document.getElementById('subdistrict').value.trim();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      const errorElement = document.getElementById('errorMessage');
+      const successElement = document.getElementById('successMessage');
+
+      if (password !== confirmPassword) {
+        errorElement.textContent = 'รหัสผ่านไม่ตรงกัน';
+        return;
+      }
+
+      if (password.length < 6) {
+        errorElement.textContent = 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร';
+        return;
+      }
+
+      if (!age || age < 1 || age > 120) {
+        errorElement.textContent = 'กรุณากรอกอายุให้ถูกต้อง';
+        return;
+      }
+
+      if (!gender) {
+        errorElement.textContent = 'กรุณาเลือกเพศ';
+        return;
+      }
+
+      errorElement.textContent = '';
+      successElement.textContent = '';
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        await setDoc(doc(db, "users", user.uid), {
+          uid: user.uid,
+          fullName: fullName,
+          age: age,
+          gender: gender,
+          address: address,
+          province: province,
+          district: district,
+          subdistrict: subdistrict,
+          email: email,
+          createdAt: new Date().toISOString()
+        });
+
+        successElement.textContent = 'สมัครสมาชิกสำเร็จ! กำลังนำทางไปหน้าเข้าสู่ระบบ...';
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 2000);
+
+      } catch (error) {
+        let message = '';
+        switch (error.code) {
+          case 'auth/email-already-in-use':
+            message = 'อีเมลนี้ถูกใช้งานแล้ว';
+            break;
+          case 'auth/invalid-email':
+            message = 'อีเมลไม่ถูกต้อง';
+            break;
+          case 'auth/weak-password':
+            message = 'รหัสผ่านอ่อนเกินไป';
+            break;
+          default:
+            message = 'เกิดข้อผิดพลาด: ' + error.message;
+        }
+        errorElement.textContent = message;
+      }
+    });
+  </script>
+
+</body>
+</html>

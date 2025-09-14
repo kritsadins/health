@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>หน้าหลัก - Health AI Plus+</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #ffffff;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: 20px;
+      padding-top: 50px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .logo img {
+      width: 150px;
+      height: 150px;
+      border-radius: 10%;
+      object-fit: cover;
+      border: 3px solid #ff6666;
+      padding: 5px;
+      box-shadow: 0 4px 10px rgba(255, 102, 102, 0.3);
+    }
+
+    h1 {
+      color: #333;
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+
+    .user-email {
+      background-color: #f9f9f9;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 16px;
+      color: #555;
+      margin: 20px 0;
+      word-break: break-all;
+      border: 1px solid #eee;
+    }
+
+    /* Card Grid */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 20px;
+      flex: 1;
+      padding: 0 10px;
+    }
+
+    .menu-card {
+      background-color: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 20px rgba(255, 102, 102, 0.15);
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: 1px solid #f0f0f0;
+      height: 160px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(255, 102, 102, 0.25);
+    }
+
+    .menu-icon {
+      font-size: 2.5rem;
+      color: #ff6666;
+      margin-bottom: 12px;
+    }
+
+    .menu-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .btn-logout {
+      display: block;
+      width: 100%;
+      max-width: 200px;
+      padding: 14px;
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin: 25px auto 0;
+      transition: background-color 0.3s;
+    }
+
+    .btn-logout:hover {
+      background-color: #c0392b;
+    }
+
+    @media (max-width: 480px) {
+      .logo img {
+        width: 70px;
+        height: 70px;
+      }
+      
+      h1 {
+        font-size: 1.6rem;
+      }
+      .menu-card {
+        padding: 16px;
+        height: 150px;
+      }
+      .menu-icon {
+        font-size: 2.2rem;
+      }
+      .menu-label {
+        font-size: 14px;
+      }
+      .btn-logout {
+        font-size: 15px;
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="logo"><img src="./logo.png" alt="Health App Logo"></div>
+    <h1>ยินดีต้อนรับ!</h1>
+    <div class="user-email" id="userEmail">กำลังโหลด...</div>
+  </div>
+
+  <div class="menu-grid">
+    <!-- ความรู้สุขภาพจิต -->
+    <a href="info.html" class="menu-card">
+      <div class="menu-icon">📚</div>
+      <div class="menu-label">ความรู้สุขภาพจิต</div>
+    </a>
+
+    <!-- แบบทดสอบ -->
+    <a href="assessment.html" class="menu-card">
+      <div class="menu-icon">📝</div>
+      <div class="menu-label">แบบทดสอบ</div>
+    </a>
+
+    <!-- ผลย้อนหลัง -->
+    <a href="history.html" class="menu-card">
+      <div class="menu-icon">📊</div>
+      <div class="menu-label">ผลย้อนหลัง</div>
+    </a>
+
+    <!-- ข้อมูลส่วนตัว -->
+    <a href="profile.html" class="menu-card">
+      <div class="menu-icon">👤</div>
+      <div class="menu-label">ข้อมูลส่วนตัว</div>
+    </a>
+  </div>
+
+
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBSI8lCUCwhf1rUj-2KyOk9qEpq4ENrkDU",
+      authDomain: "health-7df2d.firebaseapp.com",
+      projectId: "health-7df2d",
+      storageBucket: "health-7df2d.firebasestorage.app",
+      messagingSenderId: "397476928045",
+      appId: "1:397476928045:web:b93febdcfcd814cc1af6a4",
+      measurementId: "G-C3TH3ER0CE"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+
+    onAuthStateChanged(auth, (user) => {
+      const userEmailEl = document.getElementById('userEmail');
+      if (user) {
+        userEmailEl.textContent = user.email;
+      } else {
+        window.location.href = "login.html";
+      }
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      try {
+        await signOut(auth);
+        alert("ออกจากระบบเรียบร้อยแล้ว");
+        window.location.href = "login.html";
+      } catch (error) {
+        alert("ออกจากระบบไม่สำเร็จ: " + error.message);
+      }
+    });
+  </script>
+
+</body>
+</html>

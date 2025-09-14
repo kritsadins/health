@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>โปรไฟล์สุขภาพ - Health AI Plus+</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #ffffff;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 5px;
+    }
+
+    .top-nav {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background-color: #fff;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 12px 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      display: none;
+    }
+
+    .top-nav a {
+      color: #333;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    .top-nav a:hover,
+    .top-nav a.active {
+      background-color: #ff6666;
+      color: white;
+    }
+
+    .bottom-nav {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background-color: #fff;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+      padding: 10px 0;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      display: none;
+    }
+
+    .bottom-nav a {
+      color: #333;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    .bottom-nav a:hover,
+    .bottom-nav a.active {
+      background-color: #ff6666;
+      color: white;
+    }
+
+    .bottom-nav a span {
+      font-size: 10px;
+      margin-top: 4px;
+    }
+
+    .main-content {
+      margin-top: 60px;
+      margin-bottom: 60px;
+      padding: 20px;
+      flex: 1;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+        .login-container {
+      background-color: #fff;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(255, 102, 102, 0.2);
+      padding: 40px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .logo {
+      margin-bottom: 25px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .logo img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #ff6666;
+      padding: 5px;
+      box-shadow: 0 4px 10px rgba(255, 102, 102, 0.3);
+    }
+
+    h1 {
+      color: #333;
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+
+    .profile-item {
+      margin-bottom: 20px;
+      padding: 15px;
+      border: 1px solid #eee;
+      border-radius: 10px;
+      background-color: #fafafa;
+    }
+
+    .profile-label {
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 5px;
+    }
+
+    .profile-value {
+      font-size: 16px;
+      color: #333;
+      word-break: break-word;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 10px;
+      font-size: 17px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: background-color 0.3s;
+    }
+
+    .btn-edit {
+      background-color: #ff9999;
+      color: white;
+    }
+
+    .btn-edit:hover {
+      background-color: #ffaaaa;
+    }
+
+    .btn-delete {
+      background-color: #e74c3c;
+      color: white;
+      margin-top: 10px;
+    }
+
+    .btn-delete:hover {
+      background-color: #c0392b;
+    }
+
+    .btn-logout {
+      background-color: #ff6666;
+      color: white;
+      margin-top: 15px;
+    }
+
+    .btn-logout:hover {
+      background-color: #ff9999;
+    }
+
+    .edit-form {
+      display: none;
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border-radius: 10px;
+    }
+
+    .edit-form .input-group {
+      margin-bottom: 15px;
+      text-align: left;
+    }
+
+    .edit-form label {
+      display: block;
+      margin-bottom: 6px;
+      color: #555;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .edit-form input,
+    .edit-form select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .form-actions button {
+      flex: 1;
+      padding: 12px;
+      font-size: 15px;
+    }
+
+    .cancel-btn {
+      background-color: #ccc;
+      color: #333;
+    }
+
+    .cancel-btn:hover {
+      background-color: #bbb;
+    }
+
+    .success-message {
+      color: #27ae60;
+      font-size: 14px;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .error-message {
+      color: #e74c3c;
+      font-size: 14px;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    @media (min-width: 768px) {
+      .top-nav {
+        display: flex;
+      }
+      .bottom-nav {
+        display: none;
+      }
+      .main-content {
+        margin-top: 60px;
+        margin-bottom: 20px;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .top-nav {
+        display: none;
+      }
+      .bottom-nav {
+        display: flex;
+      }
+      .main-content {
+        margin-top: 20px;
+        margin-bottom: 60px;
+      }
+      .profile-item {
+        padding: 12px;
+      }
+      .edit-form {
+        padding: 15px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .logo {
+        font-size: 2rem;
+      }
+      h1 {
+        font-size: 1.6rem;
+      }
+      .profile-value {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="top-nav">
+    <a href="home.html" class="nav-link">หน้าแรก</a>
+    <a href="assessment.html" class="nav-link">แบบทดสอบ</a>
+    <a href="history.html" class="nav-link">ผลย้อนหลัง</a>
+    <a href="profile.html" class="nav-link active">ข้อมูลส่วนตัว</a>
+  </nav>
+
+  <nav class="bottom-nav">
+    <a href="home.html" class="nav-link">
+      <span>🏠</span>
+      <span>หน้าแรก</span>
+    </a>
+    <a href="assessment.html" class="nav-link">
+      <span>📝</span>
+      <span>แบบทดสอบ</span>
+    </a>
+    <a href="history.html" class="nav-link">
+      <span>📊</span>
+      <span>ผลย้อนหลัง</span>
+    </a>
+    <a href="profile.html" class="nav-link active">
+      <span>👤</span>
+      <span>ข้อมูลส่วนตัว</span>
+    </a>
+  </nav>
+
+  <div class="main-content">
+    <div class="header">
+<div class="logo"><img src="./acc.png" alt="Health App Logo"></div>
+      <h1>โปรไฟล์สุขภาพ</h1>
+    </div>
+
+    <div id="profileDisplay">
+      <div class="profile-item">
+        <div class="profile-label">ชื่อ-นามสกุล</div>
+        <div class="profile-value" id="fullName">กำลังโหลด...</div>
+      </div>
+
+      <div class="profile-item">
+        <div class="profile-label">อายุ</div>
+        <div class="profile-value" id="age">กำลังโหลด...</div>
+      </div>
+
+      <div class="profile-item">
+        <div class="profile-label">เพศ</div>
+        <div class="profile-value" id="gender">กำลังโหลด...</div>
+      </div>
+
+      <div class="profile-item">
+        <div class="profile-label">ที่อยู่</div>
+        <div class="profile-value" id="address">กำลังโหลด...</div>
+      </div>
+
+      <div class="profile-item">
+        <div class="profile-label">จังหวัด</div>
+        <div class="profile-value" id="province">กำลังโหลด...</div>
+      </div>
+
+      <div class="profile-item">
+        <div class="profile-label">อำเภอ</div>
+        <div class="profile-value" id="district">กำลังโหลด...</div>
+      </div>
+
+      <div class="profile-item">
+        <div class="profile-label">ตำบล</div>
+        <div class="profile-value" id="subdistrict">กำลังโหลด...</div>
+      </div>
+
+      <div class="profile-item">
+        <div class="profile-label">อีเมล</div>
+        <div class="profile-value" id="email">กำลังโหลด...</div>
+      </div>
+
+       <button class="btn btn-logout" id="logoutBtn">ออกจากระบบ</button>
+       <button class="btn btn-edit" id="editBtn">แก้ไขข้อมูล</button>
+      <button class="btn btn-delete" id="deleteBtn">ลบบัญชี</button>
+     
+    </div>
+
+    <div id="editForm" class="edit-form">
+      <div class="input-group">
+        <label for="editFullName">ชื่อ-นามสกุล *</label>
+        <input type="text" id="editFullName" required />
+      </div>
+
+      <div class="input-group">
+        <label for="editAge">อายุ *</label>
+        <input type="number" id="editAge" min="1" max="120" required />
+      </div>
+
+      <div class="input-group">
+        <label for="editGender">เพศ *</label>
+        <select id="editGender" required>
+          <option value="">เลือกเพศ</option>
+          <option value="male">ชาย</option>
+          <option value="female">หญิง</option>
+          <option value="other">อื่นๆ</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label for="editAddress">ที่อยู่ *</label>
+        <input type="text" id="editAddress" required />
+      </div>
+
+      <div class="input-group">
+        <label for="editProvince">จังหวัด *</label>
+        <input type="text" id="editProvince" required />
+      </div>
+
+      <div class="input-group">
+        <label for="editDistrict">อำเภอ *</label>
+        <input type="text" id="editDistrict" required />
+      </div>
+
+      <div class="input-group">
+        <label for="editSubdistrict">ตำบล *</label>
+        <input type="text" id="editSubdistrict" required />
+      </div>
+
+      <div class="form-actions">
+        <button class="btn cancel-btn" id="cancelBtn">ยกเลิก</button>
+        <button class="btn btn-edit" id="saveBtn">บันทึก</button>
+      </div>
+    </div>
+
+    <p class="success-message" id="successMessage"></p>
+    <p class="error-message" id="errorMessage"></p>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBSI8lCUCwhf1rUj-2KyOk9qEpq4ENrkDU",
+      authDomain: "health-7df2d.firebaseapp.com",
+      projectId: "health-7df2d",
+      storageBucket: "health-7df2d.firebasestorage.app",
+      messagingSenderId: "397476928045",
+      appId: "1:397476928045:web:b93febdcfcd814cc1af6a4",
+      measurementId: "G-C3TH3ER0CE"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+    const db = getFirestore(app);
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      const currentPath = window.location.pathname.split('/').pop();
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === currentPath) {
+          link.classList.add('active');
+        }
+      });
+
+      const userDocRef = doc(db, "users", user.uid);
+      const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const userData = docSnapshot.data();
+          document.getElementById('fullName').textContent = userData.fullName || 'ไม่มีข้อมูล';
+          document.getElementById('age').textContent = userData.age || 'ไม่มีข้อมูล';
+          document.getElementById('gender').textContent = userData.gender === 'male' ? 'ชาย' : 
+                                                        userData.gender === 'female' ? 'หญิง' : 'อื่นๆ';
+          document.getElementById('address').textContent = userData.address || 'ไม่มีข้อมูล';
+          document.getElementById('province').textContent = userData.province || 'ไม่มีข้อมูล';
+          document.getElementById('district').textContent = userData.district || 'ไม่มีข้อมูล';
+          document.getElementById('subdistrict').textContent = userData.subdistrict || 'ไม่มีข้อมูล';
+          document.getElementById('email').textContent = userData.email || 'ไม่มีข้อมูล';
+
+          document.getElementById('editFullName').value = userData.fullName || '';
+          document.getElementById('editAge').value = userData.age || '';
+          document.getElementById('editGender').value = userData.gender || '';
+          document.getElementById('editAddress').value = userData.address || '';
+          document.getElementById('editProvince').value = userData.province || '';
+          document.getElementById('editDistrict').value = userData.district || '';
+          document.getElementById('editSubdistrict').value = userData.subdistrict || '';
+        } else {
+          document.getElementById('errorMessage').textContent = 'ไม่พบข้อมูลผู้ใช้';
+        }
+      }, (error) => {
+        document.getElementById('errorMessage').textContent = 'เกิดข้อผิดพลาด: ' + error.message;
+      });
+
+      window.addEventListener('beforeunload', () => unsubscribe());
+    });
+
+    document.getElementById('editBtn').addEventListener('click', () => {
+      document.getElementById('profileDisplay').style.display = 'none';
+      document.getElementById('editForm').style.display = 'block';
+      document.getElementById('errorMessage').textContent = '';
+      document.getElementById('successMessage').textContent = '';
+    });
+
+    document.getElementById('cancelBtn').addEventListener('click', () => {
+      document.getElementById('profileDisplay').style.display = 'block';
+      document.getElementById('editForm').style.display = 'none';
+      document.getElementById('errorMessage').textContent = '';
+      document.getElementById('successMessage').textContent = '';
+    });
+
+    document.getElementById('saveBtn').addEventListener('click', async () => {
+      const uid = auth.currentUser.uid;
+      const userDocRef = doc(db, "users", uid);
+
+      const updatedData = {
+        fullName: document.getElementById('editFullName').value.trim(),
+        age: parseInt(document.getElementById('editAge').value),
+        gender: document.getElementById('editGender').value,
+        address: document.getElementById('editAddress').value.trim(),
+        province: document.getElementById('editProvince').value.trim(),
+        district: document.getElementById('editDistrict').value.trim(),
+        subdistrict: document.getElementById('editSubdistrict').value.trim(),
+      };
+
+      if (!updatedData.fullName || !updatedData.age || !updatedData.gender || !updatedData.address || !updatedData.province || !updatedData.district || !updatedData.subdistrict) {
+        document.getElementById('errorMessage').textContent = 'กรุณากรอกข้อมูลให้ครบ';
+        return;
+      }
+
+      if (updatedData.age < 1 || updatedData.age > 120) {
+        document.getElementById('errorMessage').textContent = 'อายุต้องอยู่ระหว่าง 1-120 ปี';
+        return;
+      }
+
+      try {
+        await updateDoc(userDocRef, updatedData);
+        document.getElementById('successMessage').textContent = 'บันทึกข้อมูลเรียบร้อยแล้ว!';
+        document.getElementById('errorMessage').textContent = '';
+
+        setTimeout(() => {
+          document.getElementById('profileDisplay').style.display = 'block';
+          document.getElementById('editForm').style.display = 'none';
+        }, 1500);
+      } catch (error) {
+        document.getElementById('errorMessage').textContent = 'เกิดข้อผิดพลาดในการบันทึก: ' + error.message;
+      }
+    });
+
+    document.getElementById('deleteBtn').addEventListener('click', async () => {
+      if (!confirm("คุณแน่ใจหรือไม่? การลบบัญชีจะลบข้อมูลทั้งหมดของคุณและไม่สามารถกู้คืนได้")) {
+        return;
+      }
+
+      const uid = auth.currentUser.uid;
+      const userDocRef = doc(db, "users", uid);
+
+      try {
+        await deleteDoc(userDocRef);
+        await signOut(auth);
+        alert("ลบบัญชีเรียบร้อยแล้ว");
+        window.location.href = "login.html";
+      } catch (error) {
+        alert("เกิดข้อผิดพลาดในการลบบัญชี: " + error.message);
+      }
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      try {
+        await signOut(auth);
+        window.location.href = "login.html";
+      } catch (error) {
+        alert("ออกจากระบบไม่สำเร็จ: " + error.message);
+      }
+    });
+  </script>
+
+</body>
+</html>
